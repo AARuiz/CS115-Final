@@ -2,55 +2,46 @@
 '|  Project:        CS115 Final
 '|  Title:          Our Tim's List Project
 '|  File Name:      TimsList.sln, .exe
-'|  Date Completed: TBD
+'|  Date Completed: 06/10/12
 '|  
+'|  Team Name:      iWare
 '|  Authors:        Andrew Ruiz, Jovanni Navia, Tye Tinsley, Chentel Smith
 '|  Course:         CS 115, Section A, Spring 2012
 '|  
-'|  Description:    This is our really cool program that does some really neat things
-'|                  that we can't really tell you what they do yet because they are kinda
-'|                  not finished but sometime soon they will be finished and then we can
-'|                  write a complete description about this really cool program that we
-'|                  created for this really cool class by this really neat instructor
-'|                  who sets the foundation for all of our future programming endeavors.
+'|  Description:    This program displays items for sale by Ads posters. The user filters
+'|                  through items by selecting a category or selecting all categories. 
+'|                  The user can choose to display all items of the selected category or
+'|                  they can set a range of prices to search for. After the user has 
+'|                  clicked the Search button the list fills with ads matching their 
+'|                  search critera. The user also has the option to Sort all of the
+'|                  displayed listings either by clicking on the Column Headers of the
+'|                  Ad Listings, or by selecting a choice from the Sort By drop down box.
 '|                  
-'|                  Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam 
-'|                  nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat 
-'|                  volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation 
-'|                  ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo 
-'|                  consequat. Duis autem vel eum iriure dolor in hendrerit in vulputate 
-'|                  velit esse molestie consequat, vel illum dolore eu feugiat nulla 
-'|                  facilisis at vero eros et accumsan et iusto odio dignissim qui 
-'|                  blandit praesent luptatum zzril delenit augue duis dolore te feugait 
-'|                  nulla facilisi. Nam liber tempor cum soluta nobis eleifend option 
-'|                  congue nihil imperdiet doming id quod mazim placerat facer possim 
-'|                  assum. Typi non habent claritatem insitam; est usus legentis in iis 
-'|                  qui facit eorum claritatem. Investigationes demonstraverunt lectores 
-'|                  legere me lius quod ii legunt saepius. Claritas est etiam processus 
-'|                  dynamicus, qui sequitur mutationem consuetudium lectorum. Mirum est 
-'|                  notare quam littera gothica, quam nunc putamus parum claram, 
-'|                  anteposuerit litterarum formas humanitatis per seacula quarta decima 
-'|                  et quinta decima. Eodem modo typi, qui nunc nobis videntur parum 
-'|                  clari, fiant sollemnes in futurum.  That means placholder text in
-'|                  latin.
-'|                  
+'|                  If a user hovers over an Ad Listing they are shown a small picture 
+'|                  preview of the item. If the user clicks an item in the list then the 
+'|                  full Ad will show with more information, including how to contact the
+'|                  poster. Also, in this window the user sees a bigger  picture of the 
+'|                  item and can click the picture to further enlarge it. Also, the user 
+'|                  has the option to clear all search criteria by  clicking the 
+'|                  Clear Search button, this will clear the ad list of all items and 
+'|                  reset the search critera to their initial values. 
 '|
 '+=======================================================================================
 '|
-'|  Known Bugs:     - Some Item names are too long for the pnlAd
+'|  Known Bugs:     - Some Item names are too long for pnlAd to display properly.
 '|                      * Partially Resolved - Lines will continue on and not be visible
 '|                          past a certain point. This only occurs when an item name for
 '|                          an Ad is an excessive amount of characters.
-'|                  - If an Ad's Actual number of lines and the First line do not match
-'|                      then the program will input bad data into the ListViewItem.
-'|                  - Item Preview on Hover only works when hovering over the first
-'|                      column of an item. 
-'|                  - lblSmallSummary text alignment is inconsistent if the item name
-'|                      text is larger than a single line that the label can hold.
-'|                      * Proposed Solution: Set background of pnlTimsToolTip to the same
-'|                          backcolor as lblSmallSummary. Make text alignment of
-'|                          lblSmallSummary text alignment Top Center. Then provide
-'|                          lblSmallSummary with a nominal .Top height.
+'|                      * Severity: Minor
+'|                  - If an Ad's Actual number of lines and the first line of the file do
+'|                      not match the program will input bad data into the ListViewItem.
+'|                      * Severity: Moderate
+'|                  - If a user hovers over an item, leaves the item but does not select
+'|                      a new item or does not leave the list view box The Item Hover
+'|                      preview does not reappear.
+'|                      * Severity: Minor
+'|                  - Some lines in rtbAdText wordwrap.
+'|                      * Severity: Minor
 '|                  
 '+=======================================================================================
 
@@ -59,7 +50,7 @@ Option Explicit On
 
 Public Class frmTimsList
 
-    Private CurrentSortColumn As Integer
+    Private intCurrentSortColumn As Integer
 
     'Varibles used for placement of objects.
     'Used by ShrinkPicture() and frmTimsList_Load
@@ -286,11 +277,11 @@ Public Class frmTimsList
         Next shtCount1
         FileClose(shtLIST)
 
-        'Filters through files, finds every Categories Max Index while 
-        'assigning the file path of an item to the array
+        'Filters through files, finds each Categories Max Index while 
+        'assigning the file path of each item to the array.
         For shtCount1 = cshtX To shtMaxIndex
             FileOpen(shtCount1, cstrFileLoc & strAllFiles(shtCount1), OpenMode.Input)
-            'Resets file line counter to defualt when reading next file increment
+            'Resets file line counter to default when reading next file increment
             shtCount2 = 1
             Do While EOF(shtCount1) = False
                 strHolder = LineInput(shtCount1)
@@ -522,7 +513,7 @@ Public Class frmTimsList
                 Return True 'Returns True if sngMax is greater than sngMin.
             End If
         Else
-            Return True 'Returns True if sngMin or sngMax values are not set.
+            Return True 'Returns True if either sngMin or sngMax values are not set.
         End If
 
     End Function
@@ -533,7 +524,9 @@ Public Class frmTimsList
         '| Description: Populates lvwList with Ads if the program detects no issues.
         '|              First it will call fCheckValues() and if it's true, then the
         '|              procedure will continue to run. Next, it will ensure the Ads'
-        '|              picture is returned to normal size. Finally, lvwList gains focus.
+        '|              picture is returned to normal size. Then the program will
+        '|              start to fill lvwList with lines that match the search criteria.
+        '|              Finally, lvwList gains focus.
         '|
         '| Calls:       fCheckValues, ShrinkPicture, PopList
         '| Called By:   txtMin_KeyPress, txtMax_KeyPress
@@ -786,7 +779,7 @@ Public Class frmTimsList
                                 Handles cmbSortOrder.SelectedIndexChanged
         '+-------------------------------------------------------------------------------
         '| Description: Changes the sort order of lvwList if the user chooses their sort
-        '|              method via cmbSortOrder
+        '|              method via cmbSortOrder.
         '+-------------------------------------------------------------------------------
 
         ' Index 0 = Sort by Name A-Z
@@ -820,11 +813,10 @@ Public Class frmTimsList
 
     Private Sub SortTimsListByColumn(ByVal column As Integer)
         '+-------------------------------------------------------------------------------
-        '| Description: 
-        '|              
+        '| Description: This Sorts columns between Descending and Ascending Order.
         '+-------------------------------------------------------------------------------
 
-        If CurrentSortColumn = column Then
+        If intCurrentSortColumn = column Then
             If lvwList.Sorting = SortOrder.Descending Then
                 lvwList.Sorting = SortOrder.Ascending
             Else
@@ -840,18 +832,19 @@ Public Class frmTimsList
 
     Private Sub PerformSortOnColumn(ByVal column As Integer)
         '+-------------------------------------------------------------------------------
-        '| Description: 
+        '| Description: Gets the sorting comparer and then sorts lvwList.
         '|              
+        '| Calls:      lvwList.Sort()
         '+-------------------------------------------------------------------------------
 
-        CurrentSortColumn = column
+        intCurrentSortColumn = column
 
         If column = 3 Then
-            lvwList.ListViewItemSorter = _
-                New listViewSorterByAmount(column, lvwList.Sorting)
+            lvwList.ListViewItemSorter = New listViewSorterByAmount(column, _
+                                                                lvwList.Sorting)
         Else
-            lvwList.ListViewItemSorter = _
-                New listViewSorterByString(column, lvwList.Sorting)
+            lvwList.ListViewItemSorter = New listViewSorterByString(column, _
+                                                                lvwList.Sorting)
         End If
 
         lvwList.Sort()
@@ -875,33 +868,30 @@ Public Class frmTimsList
                                 Handles lvwList.ItemMouseHover
         '+-------------------------------------------------------------------------------
         '| Description: Changes the location of picTimsToolTip based upon the location
-        '|              of the users mouse cursor.
+        '|              of the users mouse cursor for a set amount of time.
         '+-------------------------------------------------------------------------------
 
         Dim strFilePath As String = cstrFileLoc & e.Item.SubItems(5).Text
         Dim MPx As Point = Me.PointToClient(Control.MousePosition)
 
-        If MPx.X < 233 Then
-            picToolTipBox.Image = Image.FromFile(strFilePath)
-            lblSmallSummary.Text = e.Item.Text
-            pnlTimsToolTip.Visible = True
+        picToolTipBox.Image = Image.FromFile(strFilePath)
+        lblSmallSummary.Text = e.Item.Text
+        pnlTimsToolTip.Visible = True
 
-            pnlTimsToolTip.Top = MPx.Y + 10
-            pnlTimsToolTip.Left = MPx.X + 10
-            Timer1.Stop()
-            Timer1.Start()
-        End If
+        pnlTimsToolTip.Top = MPx.Y - pnlTimsToolTip.Height + 40
+        pnlTimsToolTip.Left = MPx.X + 10
+        tmrPreview.Stop()
+        tmrPreview.Start()
 
     End Sub
 
-    Private Sub Timer1_Tick(ByVal sender As System.Object, _
-                                ByVal e As System.EventArgs) Handles Timer1.Tick
+    Private Sub tmrPreview_Tick(ByVal sender As System.Object, _
+                                ByVal e As System.EventArgs) Handles tmrPreview.Tick
         '+-------------------------------------------------------------------------------
-        '| Description: 
-        '|              
+        '| Description: Ends the MouseHover event and hides pnlTimsToolTip
         '+-------------------------------------------------------------------------------
 
-        Timer1.Stop()
+        tmrPreview.Stop()
         pnlTimsToolTip.Visible = False
 
     End Sub
@@ -910,7 +900,7 @@ Public Class frmTimsList
                                 ByVal e As System.Windows.Forms.MouseEventArgs) _
                                 Handles lvwList.MouseMove
         '+-------------------------------------------------------------------------------
-        '| Description: Hides pnlTimsToolTip if not item is currently being hovered over.
+        '| Description: Hides pnlTimsToolTip if no item is currently being hovered over.
         '+-------------------------------------------------------------------------------
 
         If lvwList.GetItemAt(e.X, e.Y) Is Nothing Then
@@ -921,8 +911,3 @@ Public Class frmTimsList
 
 End Class
 
-' Description Block set to 90 Columns when autotabbed
-'+-------------------------------------------------------------------------------
-'| Description: 
-'|              
-'+-------------------------------------------------------------------------------

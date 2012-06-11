@@ -9,8 +9,7 @@ Public Class listViewSorterByString
 
     Public Sub New(ByVal columnNumber As Integer, ByVal colSortOrder As SortOrder)
         '+-------------------------------------------------------------------------------
-        '| Description: 
-        '|              
+        '| Description: Assigns values for use by Compare.
         '+-------------------------------------------------------------------------------
 
         intSortColumn = columnNumber
@@ -18,11 +17,11 @@ Public Class listViewSorterByString
 
     End Sub
 
-    ' This function compares the item data within the columns of lvwList specifically the String datatypes
-    Public Function Compare(ByVal x As Object, ByVal y As Object) As Integer Implements System.Collections.IComparer.Compare
+    Public Function Compare(ByVal x As Object, ByVal y As Object) As Integer Implements _
+        System.Collections.IComparer.Compare
         '+-------------------------------------------------------------------------------
-        '| Description: 
-        '|              
+        '| Description: This function compares the item data within the columns of
+        '|              lvwList specifically the String datatypes
         '+-------------------------------------------------------------------------------
 
         Dim item1, item2 As ListViewItem
@@ -43,10 +42,12 @@ Public Class listViewSorterByString
 
 
         If columnSortOrder = SortOrder.Ascending Then
-            ' If the sort column is greater than ZERO then we are sorting based on a subitem, not the main column
+            ' If the sort column is greater than ZERO then we are sorting based on a 
+            '| subitem, not the main column
             Return String.Compare(strCompareValueOne, strCompareValueTwo)
         Else
-            ' If the sort column is greater than ZERO then we are sorting based on a subitem, not the main column
+            ' If the sort column is greater than ZERO then we are sorting based on a 
+            '| subitem, not the main column
             Return String.Compare(strCompareValueTwo, strCompareValueOne)
         End If
 
@@ -62,21 +63,19 @@ Public Class listViewSorterByAmount
     Private columnSortOrder As SortOrder
 
     Public Sub New(ByVal columnNumber As Integer, ByVal colSortOrder As SortOrder)
-
         '+-------------------------------------------------------------------------------
-        '| Description: 
-        '|              
+        '| Description: Assigns Values for use by Compare.
         '+-------------------------------------------------------------------------------
 
         intSortColumn = columnNumber
         columnSortOrder = colSortOrder
     End Sub
 
-    ' This function compares the item data within the columns of lvwList specifically the  datatypes
-    Public Function Compare(ByVal x As Object, ByVal y As Object) As Integer Implements System.Collections.IComparer.Compare
+    Public Function Compare(ByVal x As Object, ByVal y As Object) As Integer Implements _
+        System.Collections.IComparer.Compare
         '+-------------------------------------------------------------------------------
-        '| Description: 
-        '|              
+        '| Description: This function compares the item data within the columns of
+        '|              lvwList for numeric values.
         '+-------------------------------------------------------------------------------
 
         Dim item1, item2 As ListViewItem
@@ -104,7 +103,8 @@ Public Class listViewSorterByAmount
 
 
         If columnSortOrder = SortOrder.Ascending Then
-            ' If the sort column is greater than ZERO then we are sorting based on a subitem, not the main column
+            ' If the sort column is greater than ZERO then we are sorting based on a 
+            ' subitem, not the main column
             If dblCompareValueOne > dblCompareValueTwo Then
                 Return 1
             ElseIf dblCompareValueOne = dblCompareValueTwo Then
@@ -113,7 +113,8 @@ Public Class listViewSorterByAmount
                 Return -1
             End If
         Else
-            ' If the sort column is greater than ZERO then we are sorting based on a subitem, not the main column
+            ' If the sort column is greater than ZERO then we are sorting based on a 
+            '| subitem, not the main column
             If dblCompareValueOne < dblCompareValueTwo Then
                 Return 1
             ElseIf dblCompareValueOne = dblCompareValueTwo Then

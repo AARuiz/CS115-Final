@@ -55,7 +55,7 @@ Partial Class frmTimsList
         Me.lblTimsListOverlay = New System.Windows.Forms.Label()
         Me.lblCreatedBy = New System.Windows.Forms.Label()
         Me.picToolTipBox = New System.Windows.Forms.PictureBox()
-        Me.Timer1 = New System.Windows.Forms.Timer(Me.components)
+        Me.tmrPreview = New System.Windows.Forms.Timer(Me.components)
         Me.pnlTimsToolTip = New System.Windows.Forms.Panel()
         Me.lblSmallSummary = New System.Windows.Forms.Label()
         CType(Me.picDoggie, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -70,6 +70,7 @@ Partial Class frmTimsList
         '
         'picDoggie
         '
+        Me.picDoggie.BackColor = System.Drawing.Color.FromArgb(CType(CType(230, Byte), Integer), CType(CType(230, Byte), Integer), CType(CType(230, Byte), Integer))
         Me.picDoggie.Image = CType(resources.GetObject("picDoggie.Image"), System.Drawing.Image)
         Me.picDoggie.Location = New System.Drawing.Point(12, 12)
         Me.picDoggie.Name = "picDoggie"
@@ -381,12 +382,14 @@ Partial Class frmTimsList
         Me.rtbAdText.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.rtbAdText.Location = New System.Drawing.Point(459, 98)
         Me.rtbAdText.Name = "rtbAdText"
+        Me.rtbAdText.ReadOnly = True
         Me.rtbAdText.Size = New System.Drawing.Size(377, 283)
         Me.rtbAdText.TabIndex = 0
         Me.rtbAdText.Text = ""
         '
         'picComputer
         '
+        Me.picComputer.BackColor = System.Drawing.Color.FromArgb(CType(CType(233, Byte), Integer), CType(CType(233, Byte), Integer), CType(CType(233, Byte), Integer))
         Me.picComputer.Image = CType(resources.GetObject("picComputer.Image"), System.Drawing.Image)
         Me.picComputer.Location = New System.Drawing.Point(216, 12)
         Me.picComputer.Name = "picComputer"
@@ -422,16 +425,16 @@ Partial Class frmTimsList
         'picToolTipBox
         '
         Me.picToolTipBox.BackColor = System.Drawing.Color.DarkSeaGreen
-        Me.picToolTipBox.Location = New System.Drawing.Point(0, 18)
+        Me.picToolTipBox.Location = New System.Drawing.Point(-1, 14)
         Me.picToolTipBox.Name = "picToolTipBox"
-        Me.picToolTipBox.Size = New System.Drawing.Size(75, 75)
+        Me.picToolTipBox.Size = New System.Drawing.Size(150, 150)
         Me.picToolTipBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom
         Me.picToolTipBox.TabIndex = 30
         Me.picToolTipBox.TabStop = False
         '
-        'Timer1
+        'tmrPreview
         '
-        Me.Timer1.Interval = 3000
+        Me.tmrPreview.Interval = 3000
         '
         'pnlTimsToolTip
         '
@@ -440,19 +443,19 @@ Partial Class frmTimsList
         Me.pnlTimsToolTip.Controls.Add(Me.picToolTipBox)
         Me.pnlTimsToolTip.Location = New System.Drawing.Point(531, 148)
         Me.pnlTimsToolTip.Name = "pnlTimsToolTip"
-        Me.pnlTimsToolTip.Size = New System.Drawing.Size(75, 94)
+        Me.pnlTimsToolTip.Size = New System.Drawing.Size(150, 165)
         Me.pnlTimsToolTip.TabIndex = 31
         '
         'lblSmallSummary
         '
         Me.lblSmallSummary.BackColor = System.Drawing.Color.DarkSeaGreen
-        Me.lblSmallSummary.Font = New System.Drawing.Font("Microsoft Sans Serif", 6.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lblSmallSummary.Location = New System.Drawing.Point(0, 0)
+        Me.lblSmallSummary.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lblSmallSummary.Location = New System.Drawing.Point(-1, 0)
         Me.lblSmallSummary.Name = "lblSmallSummary"
-        Me.lblSmallSummary.Size = New System.Drawing.Size(75, 15)
+        Me.lblSmallSummary.Size = New System.Drawing.Size(150, 15)
         Me.lblSmallSummary.TabIndex = 31
         Me.lblSmallSummary.Text = "Label1"
-        Me.lblSmallSummary.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+        Me.lblSmallSummary.TextAlign = System.Drawing.ContentAlignment.TopCenter
         '
         'frmTimsList
         '
@@ -520,7 +523,7 @@ Partial Class frmTimsList
     Friend WithEvents lblEnlargePic As System.Windows.Forms.Label
     Friend WithEvents lblCreatedBy As System.Windows.Forms.Label
     Friend WithEvents picToolTipBox As System.Windows.Forms.PictureBox
-    Friend WithEvents Timer1 As System.Windows.Forms.Timer
+    Friend WithEvents tmrPreview As System.Windows.Forms.Timer
     Friend WithEvents pnlTimsToolTip As System.Windows.Forms.Panel
     Friend WithEvents lblSmallSummary As System.Windows.Forms.Label
 
