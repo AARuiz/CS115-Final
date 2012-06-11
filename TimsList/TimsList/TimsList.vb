@@ -38,19 +38,24 @@
 '+=======================================================================================
 '|
 '|  Known Bugs:     - Some Item names are too long for the pnlAd
-'|                      * Resolved
+'|                      * Partially Resolved - Lines will continue on and not be visible
+'|                          past a certain point. This only occurs when an item name for
+'|                          an Ad is an excessive amount of characters.
 '|                  - If an Ad's Actual number of lines and the First line do not match
-'|                      then the program will display the previous Ad's picture.
-'|                  - If rtbOutput is hidden, ads do not display...
-'|                  -
-'|                  -
+'|                      then the program will input bad data into the ListViewItem.
+'|                  - Item Preview on Hover only works when hovering over the first
+'|                      column of an item. 
+'|                  - lblSmallSummary text alignment is inconsistent if the item name
+'|                      text is larger than a single line that the label can hold.
+'|                      * Proposed Solution: Set background of pnlTimsToolTip to the same
+'|                          backcolor as lblSmallSummary. Make text alignment of
+'|                          lblSmallSummary text alignment Top Center. Then provide
+'|                          lblSmallSummary with a nominal .Top height.
 '|                  
 '+=======================================================================================
 
 Option Strict On
 Option Explicit On
-
-'Imports System.IO
 
 Public Class frmTimsList
 
@@ -72,7 +77,7 @@ Public Class frmTimsList
     'Location of Data Files
     Dim cstrFileLoc As String = "../../Bin/Data/"
 
-    'Arrays for each Catagory
+    'Arrays for each Category
     Dim cstrAutoFiles() As String
     Dim cstrCellFiles() As String
     Dim cstrFnGFiles() As String
@@ -80,7 +85,7 @@ Public Class frmTimsList
     Dim cstrLapPCFiles() As String
     Dim cstrSportFiles() As String
 
-    'Counters for Catagories array index
+    'Counters for Categories array index
     Dim cshtX As Short = 1
     Dim cshtAutoCnt As Short = 1
     Dim cshtCellPhnCnt As Short = 1
@@ -118,11 +123,13 @@ Public Class frmTimsList
 
         '--------------------------------------------
 
-        'Sets locations of most objects with frmTimsList as parent
-
+        'Sets the GUI Header for our project.
         lblTimsList.Text = "Welcome to Tim's List!"
 
-        picDoggie.Left = CInt((Me.ClientSize.Width - cshtOUTER_MARGIN * 2 - picDoggie.Width - picComputer.Width - lblTimsList.Width) / 2)
+        'Sets locations of most objects with frmTimsList as parent
+        picDoggie.Left = CInt((Me.ClientSize.Width - cshtOUTER_MARGIN * 2 _
+                               - picDoggie.Width - picComputer.Width _
+                               - lblTimsList.Width) / 2)
         picDoggie.Top = cshtOUTER_MARGIN
 
         lblTimsList.Left = picDoggie.Left + picDoggie.Width
@@ -196,7 +203,7 @@ Public Class frmTimsList
         pnlAd.Left = lvwList.Left
         pnlAd.Width = lvwList.Width
         pnlAd.Height = lvwList.Height
-        pnlAd.BackColor = Color.Beige
+        pnlAd.BackColor = Color.DarkSeaGreen
 
         'Sets location and sizes of items inside of pnlAd
         lblAdItem.Top = 0
@@ -255,7 +262,8 @@ Public Class frmTimsList
         lblTimsListVertClone4.ForeColor = Color.Gold
 
         llbBack.Top = rtbAdText.Top - llbBack.Height
-        llbBack.Left = lblTimsListVert.Left - llbBack.Width - cshtINNER_MARGIN - shtBORDER
+        llbBack.Left = lblTimsListVert.Left - llbBack.Width - cshtINNER_MARGIN _
+                                - shtBORDER
 
         'Creates all columns for lvwList.
         lvwList.Columns.Add("Item Name", 220, HorizontalAlignment.Left)
@@ -278,7 +286,7 @@ Public Class frmTimsList
         Next shtCount1
         FileClose(shtLIST)
 
-        'Filters through files, finds every Catagories Max Index while 
+        'Filters through files, finds every Categories Max Index while 
         'assigning the file path of an item to the array
         For shtCount1 = cshtX To shtMaxIndex
             FileOpen(shtCount1, cstrFileLoc & strAllFiles(shtCount1), OpenMode.Input)
@@ -286,7 +294,7 @@ Public Class frmTimsList
             shtCount2 = 1
             Do While EOF(shtCount1) = False
                 strHolder = LineInput(shtCount1)
-                'Checks Catagory line in file (line 4)
+                'Checks Category line in file (line 4)
                 If shtCount2 = 4 And strHolder.Contains("Automobiles") Then
                     ReDim Preserve cstrAutoFiles(cshtAutoCnt)
                     cstrAutoFiles(cshtAutoCnt) = cstrFileLoc & strAllFiles(shtCount1)
@@ -317,6 +325,9 @@ Public Class frmTimsList
             FileClose(shtCount1)
         Next shtCount1
 
+        'Ensures TimsToolTip is initially hidden.
+        pnlTimsToolTip.Visible = False
+
     End Sub
 
     Private Sub AdShow()
@@ -340,6 +351,7 @@ Public Class frmTimsList
         picAdPicture.Image = Image.FromFile(cstrFileLoc & lviSelItem.SubItems(5).Text)
         pnlAd.Visible = True
         rtbAdText.Focus()
+        pnlTimsToolTip.Visible = False
 
     End Sub
 
@@ -373,13 +385,6 @@ Public Class frmTimsList
 
     End Sub
 
-    'Private Sub lvwList_MouseMove(ByVal sender As Object, ByVal e As System.Windows.Forms.MouseEventArgs) Handles lvwList.MouseMove
-    '   'Ensures the tooltip is removed if no item is currently being hovered over.
-    '    If lvwList.GetItemAt(e.X, e.Y) Is Nothing Then
-    '        tipList.RemoveAll()
-    '    End If
-    'End Sub
-
     Private Sub txtMin_GotFocus(ByVal sender As Object, _
                                 ByVal e As System.EventArgs) Handles txtMin.GotFocus
         '+-------------------------------------------------------------------------------
@@ -391,6 +396,7 @@ Public Class frmTimsList
             txtMin.Text = String.Empty
             txtMin.ForeColor = Color.Black
         End If
+
     End Sub
 
     Private Sub txtMax_GotFocus(ByVal sender As Object, _
@@ -516,7 +522,7 @@ Public Class frmTimsList
                 Return True 'Returns True if sngMax is greater than sngMin.
             End If
         Else
-            Return True 'Returns True if a sngMin or sngMax value are not set.
+            Return True 'Returns True if sngMin or sngMax values are not set.
         End If
 
     End Function
@@ -554,6 +560,7 @@ Public Class frmTimsList
         lvwList.Items.Clear()
         pnlAd.Visible = False
         cmbCategorySelect.SelectedIndex = 0
+        cmbSortOrder.SelectedIndex = 0
         txtMin.Text = String.Empty
         Call txtMin_LostFocus(sender, e)
         txtMax.Text = String.Empty
@@ -570,8 +577,10 @@ Public Class frmTimsList
 
         pnlAdPicture.Top = lblAdCategory.Top + lblAdCategory.Height + cshtINNER_MARGIN
         pnlAdPicture.Left = cshtOUTER_MARGIN
-        pnlAdPicture.Height = pnlAd.Height - lblAdItem.Height - lblAdCategory.Height - cshtINNER_MARGIN * 3
-        pnlAdPicture.Width = pnlAd.Width - lblTimsListVert.Width - rtbAdText.Width - cshtOUTER_MARGIN * 3
+        pnlAdPicture.Height = pnlAd.Height - lblAdItem.Height - lblAdCategory.Height _
+                                - cshtINNER_MARGIN * 3
+        pnlAdPicture.Width = pnlAd.Width - lblTimsListVert.Width - rtbAdText.Width _
+                                - cshtOUTER_MARGIN * 3
         picAdPicture.Top = 0
         picAdPicture.Left = 0
         picAdPicture.Size = pnlAdPicture.Size
@@ -610,35 +619,36 @@ Public Class frmTimsList
         '| Description: Populates lvwList with ad information depending on which category
         '|              the user has selected.
         '|
-        '| Calls:       sGetList
+        '| Calls:       GetList
         '+-------------------------------------------------------------------------------
 
         lvwList.Items.Clear()
+
         Select Case cmbCategorySelect.SelectedIndex
             Case 0
-                sGetList(cshtAutoCnt, cstrAutoFiles)
-                sGetList(cshtCellPhnCnt, cstrCellFiles)
-                sGetList(cshtFnGCnt, cstrFnGFiles)
-                sGetList(cshtFurnCnt, cstrFurnFiles)
-                sGetList(cshtLapPCCnt, cstrLapPCFiles)
-                sGetList(cshtSportCnt, cstrSportFiles)
+                GetList(cshtAutoCnt, cstrAutoFiles)
+                GetList(cshtCellPhnCnt, cstrCellFiles)
+                GetList(cshtFnGCnt, cstrFnGFiles)
+                GetList(cshtFurnCnt, cstrFurnFiles)
+                GetList(cshtLapPCCnt, cstrLapPCFiles)
+                GetList(cshtSportCnt, cstrSportFiles)
             Case 1
-                sGetList(cshtAutoCnt, cstrAutoFiles)
+                GetList(cshtAutoCnt, cstrAutoFiles)
             Case 2
-                sGetList(cshtCellPhnCnt, cstrCellFiles)
+                GetList(cshtCellPhnCnt, cstrCellFiles)
             Case 3
-                sGetList(cshtFnGCnt, cstrFnGFiles)
+                GetList(cshtFnGCnt, cstrFnGFiles)
             Case 4
-                sGetList(cshtFurnCnt, cstrFurnFiles)
+                GetList(cshtFurnCnt, cstrFurnFiles)
             Case 5
-                sGetList(cshtLapPCCnt, cstrLapPCFiles)
+                GetList(cshtLapPCCnt, cstrLapPCFiles)
             Case 6
-                sGetList(cshtSportCnt, cstrSportFiles)
+                GetList(cshtSportCnt, cstrSportFiles)
         End Select
 
     End Sub
 
-    Private Sub sGetList(ByVal Index As Short, ByRef CatArray() As String)
+    Private Sub GetList(ByVal Index As Short, ByRef CatArray() As String)
         '+-------------------------------------------------------------------------------
         '| Description: Filters through selected array passed from PopList and then
         '|              starts creating individual lines for each item. While 
@@ -650,15 +660,15 @@ Public Class frmTimsList
         '| Called By:   PopList
         '+-------------------------------------------------------------------------------
 
-        Dim strName As String
-        Dim strShrtDesc As String
-        Dim strLngDesc As String
-        Dim strPic As String
-        Dim strPrefCont As String
-        Dim strCont As String
-        Dim strCat As String
-        Dim strHolder As String
-        Dim strPrice As String
+        Dim strName As String = String.Empty
+        Dim strShrtDesc As String = String.Empty
+        Dim strLngDesc As String = String.Empty
+        Dim strPic As String = String.Empty
+        Dim strPrefCont As String = String.Empty
+        Dim strCont As String = String.Empty
+        Dim strCat As String = String.Empty
+        Dim strHolder As String = String.Empty
+        Dim strPrice As String = String.Empty
 
         Dim shtDescLeng As Short
         Dim shtTotLines As Short
@@ -715,8 +725,8 @@ Public Class frmTimsList
             End If
 
             'Checks if strPrice can be converted into a single.
-            'If it cannot then the value will change to the user
-            'inputted maximum value so the listing will stll appear.
+            'If it cannot then the value will change to the maximum
+            'price range value so the listing will stll appear.
             Try
                 sngPrice = CSng(strPrice)
             Catch ex As Exception
@@ -753,39 +763,32 @@ Public Class frmTimsList
 
     End Sub
 
-    Private Sub lvwList_ColumnWidthChanging(ByVal sender As Object, ByVal e As System.Windows.Forms.ColumnWidthChangingEventArgs) Handles lvwList.ColumnWidthChanging
+    Private Sub lvwList_ColumnWidthChanging(ByVal sender As Object, _
+                        ByVal e As System.Windows.Forms.ColumnWidthChangingEventArgs) _
+                        Handles lvwList.ColumnWidthChanging
+        '+-------------------------------------------------------------------------------
+        '| Description: Prevents the Resizing of the Columns within lvwList.
+        '+-------------------------------------------------------------------------------
 
-        Dim intCol0 = lvwList.Columns(0).Width
-        Dim intCol1 = lvwList.Columns(1).Width
-        Dim intCol2 = lvwList.Columns(2).Width
-        Dim intCol3 = lvwList.Columns(3).Width
-        Dim intCol4 = lvwList.Columns(4).Width
-        Dim intCol5 = lvwList.Columns(5).Width
-        Dim intCol6 = lvwList.Columns(6).Width
-        Dim intCol7 = lvwList.Columns(7).Width
+        Dim intColWidth(lvwList.Columns.Count - 1) As Integer
+
+        For i As Integer = 0 To (lvwList.Columns.Count - 1)
+            intColWidth(i) = lvwList.Columns(i).Width
+        Next i
 
         e.Cancel = True
-        Select Case e.ColumnIndex
-            Case 0
-                e.NewWidth = intCol0
-            Case 1
-                e.NewWidth = intCol1
-            Case 2
-                e.NewWidth = intCol2
-            Case 3
-                e.NewWidth = intCol3
-            Case 4
-                e.NewWidth = intCol4
-            Case 5
-                e.NewWidth = intCol5
-            Case 6
-                e.NewWidth = intCol6
-            Case 7
-                e.NewWidth = intCol7
-        End Select
+        e.NewWidth = intColWidth(e.ColumnIndex)
+
     End Sub
 
-    Private Sub cmbSortOrder_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmbSortOrder.SelectedIndexChanged
+    Private Sub cmbSortOrder_SelectedIndexChanged(ByVal sender As System.Object, _
+                                ByVal e As System.EventArgs) _
+                                Handles cmbSortOrder.SelectedIndexChanged
+        '+-------------------------------------------------------------------------------
+        '| Description: Changes the sort order of lvwList if the user chooses their sort
+        '|              method via cmbSortOrder
+        '+-------------------------------------------------------------------------------
+
         ' Index 0 = Sort by Name A-Z
         ' Index 1 = Sort by Name Z-A
         ' Index 2 = Sort Category A-Z
@@ -812,9 +815,14 @@ Public Class frmTimsList
             lvwList.Sorting = SortOrder.Descending
             PerformSortOnColumn(3)
         End If
+
     End Sub
 
     Private Sub SortTimsListByColumn(ByVal column As Integer)
+        '+-------------------------------------------------------------------------------
+        '| Description: 
+        '|              
+        '+-------------------------------------------------------------------------------
 
         If CurrentSortColumn = column Then
             If lvwList.Sorting = SortOrder.Descending Then
@@ -827,28 +835,94 @@ Public Class frmTimsList
         End If
 
         PerformSortOnColumn(column)
+
     End Sub
 
     Private Sub PerformSortOnColumn(ByVal column As Integer)
+        '+-------------------------------------------------------------------------------
+        '| Description: 
+        '|              
+        '+-------------------------------------------------------------------------------
+
         CurrentSortColumn = column
+
         If column = 3 Then
-            lvwList.ListViewItemSorter = New listViewSorterByAmount(column, lvwList.Sorting)
+            lvwList.ListViewItemSorter = _
+                New listViewSorterByAmount(column, lvwList.Sorting)
         Else
-            lvwList.ListViewItemSorter = New listViewSorterByString(column, lvwList.Sorting)
+            lvwList.ListViewItemSorter = _
+                New listViewSorterByString(column, lvwList.Sorting)
         End If
+
         lvwList.Sort()
+
     End Sub
 
-    ' This code allows the columns within lvwList to be Sorted back and forth between Ascending and Descending order.
+    Private Sub lvwList_ColumnClick(ByVal sender As System.Object, _
+                                ByVal e As System.Windows.Forms.ColumnClickEventArgs) _
+                                Handles lvwList.ColumnClick
+        '+-------------------------------------------------------------------------------
+        '| Description: When clicking a column this changes between ascending and
+        '|              descending order when clicked.
+        '+-------------------------------------------------------------------------------
 
-    Private Sub lvwList_ColumnClick(ByVal sender As System.Object, ByVal e As System.Windows.Forms.ColumnClickEventArgs) Handles lvwList.ColumnClick
         SortTimsListByColumn(e.Column)
+
+    End Sub
+
+    Private Sub lvwList_ItemMouseHover(ByVal sender As System.Object, ByVal e As  _
+                                System.Windows.Forms.ListViewItemMouseHoverEventArgs) _
+                                Handles lvwList.ItemMouseHover
+        '+-------------------------------------------------------------------------------
+        '| Description: Changes the location of picTimsToolTip based upon the location
+        '|              of the users mouse cursor.
+        '+-------------------------------------------------------------------------------
+
+        Dim strFilePath As String = cstrFileLoc & e.Item.SubItems(5).Text
+        Dim MPx As Point = Me.PointToClient(Control.MousePosition)
+
+        If MPx.X < 233 Then
+            picToolTipBox.Image = Image.FromFile(strFilePath)
+            lblSmallSummary.Text = e.Item.Text
+            pnlTimsToolTip.Visible = True
+
+            pnlTimsToolTip.Top = MPx.Y + 10
+            pnlTimsToolTip.Left = MPx.X + 10
+            Timer1.Stop()
+            Timer1.Start()
+        End If
+
+    End Sub
+
+    Private Sub Timer1_Tick(ByVal sender As System.Object, _
+                                ByVal e As System.EventArgs) Handles Timer1.Tick
+        '+-------------------------------------------------------------------------------
+        '| Description: 
+        '|              
+        '+-------------------------------------------------------------------------------
+
+        Timer1.Stop()
+        pnlTimsToolTip.Visible = False
+
+    End Sub
+
+    Private Sub lvwList_MouseMove(ByVal sender As System.Object, _
+                                ByVal e As System.Windows.Forms.MouseEventArgs) _
+                                Handles lvwList.MouseMove
+        '+-------------------------------------------------------------------------------
+        '| Description: Hides pnlTimsToolTip if not item is currently being hovered over.
+        '+-------------------------------------------------------------------------------
+
+        If lvwList.GetItemAt(e.X, e.Y) Is Nothing Then
+            pnlTimsToolTip.Visible = False
+        End If
+
     End Sub
 
 End Class
-'
+
 ' Description Block set to 90 Columns when autotabbed
 '+-------------------------------------------------------------------------------
 '| Description: 
-'|                  
+'|              
 '+-------------------------------------------------------------------------------

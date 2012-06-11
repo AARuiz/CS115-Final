@@ -22,6 +22,7 @@ Partial Class frmTimsList
     'Do not modify it using the code editor.
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
+        Me.components = New System.ComponentModel.Container()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(frmTimsList))
         Me.picDoggie = New System.Windows.Forms.PictureBox()
         Me.lblTimsList = New System.Windows.Forms.Label()
@@ -53,12 +54,18 @@ Partial Class frmTimsList
         Me.picComputer = New System.Windows.Forms.PictureBox()
         Me.lblTimsListOverlay = New System.Windows.Forms.Label()
         Me.lblCreatedBy = New System.Windows.Forms.Label()
+        Me.picToolTipBox = New System.Windows.Forms.PictureBox()
+        Me.Timer1 = New System.Windows.Forms.Timer(Me.components)
+        Me.pnlTimsToolTip = New System.Windows.Forms.Panel()
+        Me.lblSmallSummary = New System.Windows.Forms.Label()
         CType(Me.picDoggie, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.pnlSearch.SuspendLayout()
         Me.pnlAd.SuspendLayout()
         Me.pnlAdPicture.SuspendLayout()
         CType(Me.picAdPicture, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.picComputer, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.picToolTipBox, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.pnlTimsToolTip.SuspendLayout()
         Me.SuspendLayout()
         '
         'picDoggie
@@ -76,7 +83,7 @@ Partial Class frmTimsList
         Me.lblTimsList.AutoSize = True
         Me.lblTimsList.BackColor = System.Drawing.Color.Transparent
         Me.lblTimsList.Font = New System.Drawing.Font("Impact", 27.75!, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lblTimsList.ForeColor = System.Drawing.Color.Orange
+        Me.lblTimsList.ForeColor = System.Drawing.Color.SeaGreen
         Me.lblTimsList.Location = New System.Drawing.Point(63, 9)
         Me.lblTimsList.Margin = New System.Windows.Forms.Padding(0)
         Me.lblTimsList.Name = "lblTimsList"
@@ -108,7 +115,7 @@ Partial Class frmTimsList
         '
         Me.txtMin.ForeColor = System.Drawing.Color.DarkGray
         Me.txtMin.Location = New System.Drawing.Point(326, 6)
-        Me.txtMin.MaxLength = 7
+        Me.txtMin.MaxLength = 9
         Me.txtMin.Name = "txtMin"
         Me.txtMin.Size = New System.Drawing.Size(72, 20)
         Me.txtMin.TabIndex = 5
@@ -118,7 +125,7 @@ Partial Class frmTimsList
         '
         Me.txtMax.ForeColor = System.Drawing.Color.DarkGray
         Me.txtMax.Location = New System.Drawing.Point(433, 6)
-        Me.txtMax.MaxLength = 7
+        Me.txtMax.MaxLength = 9
         Me.txtMax.Name = "txtMax"
         Me.txtMax.Size = New System.Drawing.Size(71, 20)
         Me.txtMax.TabIndex = 6
@@ -146,7 +153,7 @@ Partial Class frmTimsList
         '
         'btnSearch
         '
-        Me.btnSearch.BackColor = System.Drawing.Color.Lime
+        Me.btnSearch.BackColor = System.Drawing.Color.YellowGreen
         Me.btnSearch.ForeColor = System.Drawing.Color.Black
         Me.btnSearch.Location = New System.Drawing.Point(518, 4)
         Me.btnSearch.Margin = New System.Windows.Forms.Padding(0)
@@ -158,17 +165,18 @@ Partial Class frmTimsList
         '
         'btnClear
         '
+        Me.btnClear.BackColor = System.Drawing.Color.IndianRed
         Me.btnClear.ForeColor = System.Drawing.Color.Black
         Me.btnClear.Location = New System.Drawing.Point(599, 4)
         Me.btnClear.Name = "btnClear"
         Me.btnClear.Size = New System.Drawing.Size(75, 23)
         Me.btnClear.TabIndex = 13
         Me.btnClear.Text = "&Clear Form"
-        Me.btnClear.UseVisualStyleBackColor = True
+        Me.btnClear.UseVisualStyleBackColor = False
         '
         'pnlSearch
         '
-        Me.pnlSearch.BackColor = System.Drawing.Color.DarkTurquoise
+        Me.pnlSearch.BackColor = System.Drawing.Color.DarkSeaGreen
         Me.pnlSearch.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.pnlSearch.Controls.Add(Me.lblSortBy)
         Me.pnlSearch.Controls.Add(Me.cmbSortOrder)
@@ -209,7 +217,7 @@ Partial Class frmTimsList
         'lvwList
         '
         Me.lvwList.Activation = System.Windows.Forms.ItemActivation.OneClick
-        Me.lvwList.BackColor = System.Drawing.Color.Bisque
+        Me.lvwList.BackColor = System.Drawing.Color.Honeydew
         Me.lvwList.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.lvwList.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lvwList.FullRowSelect = True
@@ -369,7 +377,7 @@ Partial Class frmTimsList
         '
         'rtbAdText
         '
-        Me.rtbAdText.BackColor = System.Drawing.SystemColors.Window
+        Me.rtbAdText.BackColor = System.Drawing.Color.Honeydew
         Me.rtbAdText.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.rtbAdText.Location = New System.Drawing.Point(459, 98)
         Me.rtbAdText.Name = "rtbAdText"
@@ -411,12 +419,48 @@ Partial Class frmTimsList
         Me.lblCreatedBy.Text = "Created By: Andrew Ruiz, Jovanni Navia, Tye Tinsley, Chentel Smith -- CS115 Secti" & _
             "on A, Spring Quarter 2012"
         '
+        'picToolTipBox
+        '
+        Me.picToolTipBox.BackColor = System.Drawing.Color.DarkSeaGreen
+        Me.picToolTipBox.Location = New System.Drawing.Point(0, 18)
+        Me.picToolTipBox.Name = "picToolTipBox"
+        Me.picToolTipBox.Size = New System.Drawing.Size(75, 75)
+        Me.picToolTipBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom
+        Me.picToolTipBox.TabIndex = 30
+        Me.picToolTipBox.TabStop = False
+        '
+        'Timer1
+        '
+        Me.Timer1.Interval = 3000
+        '
+        'pnlTimsToolTip
+        '
+        Me.pnlTimsToolTip.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.pnlTimsToolTip.Controls.Add(Me.lblSmallSummary)
+        Me.pnlTimsToolTip.Controls.Add(Me.picToolTipBox)
+        Me.pnlTimsToolTip.Location = New System.Drawing.Point(531, 148)
+        Me.pnlTimsToolTip.Name = "pnlTimsToolTip"
+        Me.pnlTimsToolTip.Size = New System.Drawing.Size(75, 94)
+        Me.pnlTimsToolTip.TabIndex = 31
+        '
+        'lblSmallSummary
+        '
+        Me.lblSmallSummary.BackColor = System.Drawing.Color.DarkSeaGreen
+        Me.lblSmallSummary.Font = New System.Drawing.Font("Microsoft Sans Serif", 6.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lblSmallSummary.Location = New System.Drawing.Point(0, 0)
+        Me.lblSmallSummary.Name = "lblSmallSummary"
+        Me.lblSmallSummary.Size = New System.Drawing.Size(75, 15)
+        Me.lblSmallSummary.TabIndex = 31
+        Me.lblSmallSummary.Text = "Label1"
+        Me.lblSmallSummary.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+        '
         'frmTimsList
         '
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None
-        Me.BackColor = System.Drawing.Color.FromArgb(CType(CType(232, Byte), Integer), CType(CType(232, Byte), Integer), CType(CType(232, Byte), Integer))
+        Me.BackColor = System.Drawing.Color.Gainsboro
         Me.BackgroundImage = CType(resources.GetObject("$this.BackgroundImage"), System.Drawing.Image)
         Me.ClientSize = New System.Drawing.Size(1018, 676)
+        Me.Controls.Add(Me.pnlTimsToolTip)
         Me.Controls.Add(Me.pnlAd)
         Me.Controls.Add(Me.lblCreatedBy)
         Me.Controls.Add(Me.picComputer)
@@ -439,6 +483,8 @@ Partial Class frmTimsList
         Me.pnlAdPicture.PerformLayout()
         CType(Me.picAdPicture, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.picComputer, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.picToolTipBox, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.pnlTimsToolTip.ResumeLayout(False)
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -473,5 +519,9 @@ Partial Class frmTimsList
     Friend WithEvents pnlAdPicture As System.Windows.Forms.Panel
     Friend WithEvents lblEnlargePic As System.Windows.Forms.Label
     Friend WithEvents lblCreatedBy As System.Windows.Forms.Label
+    Friend WithEvents picToolTipBox As System.Windows.Forms.PictureBox
+    Friend WithEvents Timer1 As System.Windows.Forms.Timer
+    Friend WithEvents pnlTimsToolTip As System.Windows.Forms.Panel
+    Friend WithEvents lblSmallSummary As System.Windows.Forms.Label
 
 End Class

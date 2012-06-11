@@ -1,19 +1,32 @@
 ﻿Imports Microsoft.VisualBasic
 
 Public Class listViewSorterByString
+
     Implements IComparer
 
     Private intSortColumn As Integer = 0
     Private columnSortOrder As SortOrder
 
     Public Sub New(ByVal columnNumber As Integer, ByVal colSortOrder As SortOrder)
+        '+-------------------------------------------------------------------------------
+        '| Description: 
+        '|              
+        '+-------------------------------------------------------------------------------
+
         intSortColumn = columnNumber
         columnSortOrder = colSortOrder
+
     End Sub
 
     ' This function compares the item data within the columns of lvwList specifically the String datatypes
     Public Function Compare(ByVal x As Object, ByVal y As Object) As Integer Implements System.Collections.IComparer.Compare
+        '+-------------------------------------------------------------------------------
+        '| Description: 
+        '|              
+        '+-------------------------------------------------------------------------------
+
         Dim item1, item2 As ListViewItem
+
         item1 = CType(x, ListViewItem)
         item2 = CType(y, ListViewItem)
 
@@ -38,21 +51,34 @@ Public Class listViewSorterByString
         End If
 
     End Function
+
 End Class
 
 Public Class listViewSorterByAmount
+
     Implements IComparer
 
     Private intSortColumn As Integer = 0
     Private columnSortOrder As SortOrder
 
     Public Sub New(ByVal columnNumber As Integer, ByVal colSortOrder As SortOrder)
+
+        '+-------------------------------------------------------------------------------
+        '| Description: 
+        '|              
+        '+-------------------------------------------------------------------------------
+
         intSortColumn = columnNumber
         columnSortOrder = colSortOrder
     End Sub
 
     ' This function compares the item data within the columns of lvwList specifically the  datatypes
     Public Function Compare(ByVal x As Object, ByVal y As Object) As Integer Implements System.Collections.IComparer.Compare
+        '+-------------------------------------------------------------------------------
+        '| Description: 
+        '|              
+        '+-------------------------------------------------------------------------------
+
         Dim item1, item2 As ListViewItem
         item1 = CType(x, ListViewItem)
         item2 = CType(y, ListViewItem)
@@ -98,4 +124,5 @@ Public Class listViewSorterByAmount
         End If
 
     End Function
+
 End Class
